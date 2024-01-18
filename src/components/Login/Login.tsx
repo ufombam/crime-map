@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import firebase from "firebase/compat/app";
 import { getAnalytics } from "firebase/analytics";
 
-// Your web app's Firebase configuration
+
+const Login = () => {
+    // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
     apiKey: "AIzaSyCzmddSK6BoUzi3UNzAs8umx2UZ0KGnNcc",
@@ -14,34 +16,30 @@ const firebaseConfig = {
     measurementId: "G-4FF787HPGR"
 };
 
-//var firebase = require('firebase');
-var firebaseui = require('firebaseui');
+    var firebaseui = require('firebaseui');
 
-// Initialize Firebase
-const app = firebase.initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+    // Initialize Firebase
+    const app = firebase.initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
 
-// Initialize the FirebaseUI Widget using Firebase.
-var ui = new firebaseui.auth.AuthUI(firebase.auth());
-
-//ui configuration file
+    //ui configuration file
     var uiConfig = {
-        callbacks: {
-            signInSuccessWithAuthResult: function(authResult: any, redirectUrl: any) {
-                console.log(authResult)
-            // User successfully signed in.
-            // Return type determines whether we continue the redirect automatically
-            // or whether we leave that to developer to handle.
-            return true;
-        },
-        uiShown: function() {
-            // The widget is rendered.
-            // Hide the loader.
-            const loadeElement = document.getElementById('loader');
-            if (loadeElement) {
-                loadeElement.style.display = 'none';
+            callbacks: {
+                signInSuccessWithAuthResult: function(authResult: any, redirectUrl: any) {
+                    console.log(authResult)
+                // User successfully signed in.
+                // Return type determines whether we continue the redirect automatically
+                // or whether we leave that to developer to handle.
+                return true;
+            },
+            uiShown: function() {
+                // The widget is rendered.
+                // Hide the loader.
+                const loaderElement = document.getElementById('loader');
+                if (loaderElement) {
+                    loaderElement.style.display = 'none';
+                }
             }
-        }
         },
         // Will use popup for IDP Providers sign-in flow instead of the default, redirect.
         signInFlow: 'popup',
@@ -65,14 +63,19 @@ var ui = new firebaseui.auth.AuthUI(firebase.auth());
         // Privacy policy url.
         privacyPolicyUrl: '<your-privacy-policy-url>'
     };
-// The start method will wait until the DOM is loaded.
-    ui.start('#firebaseui-auth-container', uiConfig)
-    
 
+    useEffect(() => {
+        // Initialize the FirebaseUI Widget using Firebase.
+        const ui = new firebaseui.auth.AuthUI(firebase.auth());
+        // The start method will wait until the DOM is loaded.
+        ui.start('#firebaseui-auth-container', uiConfig);
 
+        return () => {
+            // Clean up FirebaseUI when the component unmounts
+            ui.delete();
+        };
+    }, []);
 
-
-function Login() {
     return (
         <div className="">
             <h1>Welcome to My Awesome App</h1>
