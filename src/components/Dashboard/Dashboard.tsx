@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,7 +14,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import SwipeableViews from 'react-swipeable-views'
 import { Tabs, Tab, Link } from '@mui/material';
 import { useTheme, createTheme, ThemeProvider } from '@mui/material/styles';
-import Dashboard from './Dashboard';
+import { userInf } from '../../App';
 
 
 const pages = [
@@ -65,8 +65,10 @@ function a11yProps(index: number) {
   };
 }
 
-
-function Nav() {
+  interface userProp {
+    user?: userInf;
+  }
+const Dashboard: React.FC<userProp> = ({ user }) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const [value, setValue] = React.useState(0);
@@ -108,7 +110,9 @@ function Nav() {
     });
 
     const theme = useTheme();
-
+    if (!user) {
+      return <h1>Loading...</h1>
+    }
     return (
       <>
         <AppBar position="static">
@@ -225,7 +229,7 @@ function Nav() {
           onChangeIndex={handleChangeIndex}
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
-            Moses
+            {user?.email}
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
             Moses Ufomba
@@ -235,4 +239,4 @@ function Nav() {
     );
 }
 
-export default Nav;
+export default Dashboard;

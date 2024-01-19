@@ -1,32 +1,41 @@
 import React, {useEffect} from 'react';
 import firebase from "firebase/compat/app";
 import { getAnalytics } from "firebase/analytics";
+import { userInf } from "../../App";
 
 
-const Login = () => {
+
+interface LoginProps {
+    updateUser: (newValue: userInf) => void;
+  }
+
+
+const Login: React.FC<LoginProps> = ({ updateUser }) => {
     // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-    apiKey: "AIzaSyCzmddSK6BoUzi3UNzAs8umx2UZ0KGnNcc",
-    authDomain: "crime-map-93121.firebaseapp.com",
-    projectId: "crime-map-93121",
-    storageBucket: "crime-map-93121.appspot.com",
-    messagingSenderId: "2015681387",
-    appId: "1:2015681387:web:d25958a3bc5c98a51d4a2e",
-    measurementId: "G-4FF787HPGR"
-};
+    // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+    const firebaseConfig = {
+        apiKey: "AIzaSyCzmddSK6BoUzi3UNzAs8umx2UZ0KGnNcc",
+        authDomain: "crime-map-93121.firebaseapp.com",
+        projectId: "crime-map-93121",
+        storageBucket: "crime-map-93121.appspot.com",
+        messagingSenderId: "2015681387",
+        appId: "1:2015681387:web:d25958a3bc5c98a51d4a2e",
+        measurementId: "G-4FF787HPGR"
+    };
 
     var firebaseui = require('firebaseui');
 
     // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
+    //const analytics = getAnalytics(app);
+    let userInfo: userInf;
 
     //ui configuration file
     var uiConfig = {
             callbacks: {
                 signInSuccessWithAuthResult: function(authResult: any, redirectUrl: any) {
-                    console.log(authResult)
+                    userInfo = authResult.additionalUserInfo.profile;
+                    updateUser(userInfo);
                 // User successfully signed in.
                 // Return type determines whether we continue the redirect automatically
                 // or whether we leave that to developer to handle.
@@ -69,7 +78,6 @@ const firebaseConfig = {
         const ui = new firebaseui.auth.AuthUI(firebase.auth());
         // The start method will wait until the DOM is loaded.
         ui.start('#firebaseui-auth-container', uiConfig);
-
         return () => {
             // Clean up FirebaseUI when the component unmounts
             ui.delete();
