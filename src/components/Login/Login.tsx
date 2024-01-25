@@ -28,14 +28,14 @@ const Login: React.FC<LoginProps> = ({ updateUser }) => {
     // Initialize Firebase
     const app = firebase.initializeApp(firebaseConfig);
     //const analytics = getAnalytics(app);
-    let userInfo: userInf;
+
 
     //ui configuration file
     var uiConfig = {
             callbacks: {
                 signInSuccessWithAuthResult: function(authResult: any, redirectUrl: any) {
-                    userInfo = authResult.additionalUserInfo.profile;
-                    updateUser(userInfo);
+                    updateUser(authResult.additionalUserInfo.profile);
+                    //console.log(authResult, "hello");
                 // User successfully signed in.
                 // Return type determines whether we continue the redirect automatically
                 // or whether we leave that to developer to handle.
@@ -77,7 +77,8 @@ const Login: React.FC<LoginProps> = ({ updateUser }) => {
         // Initialize the FirebaseUI Widget using Firebase.
         const ui = new firebaseui.auth.AuthUI(firebase.auth());
         // The start method will wait until the DOM is loaded.
-        ui.start('#firebaseui-auth-container', uiConfig);
+        ui.start('#firebaseui-auth-container', uiConfig)
+        //console.log(userInfo)
         return () => {
             // Clean up FirebaseUI when the component unmounts
             ui.delete();

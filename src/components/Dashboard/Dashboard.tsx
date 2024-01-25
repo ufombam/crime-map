@@ -15,6 +15,7 @@ import SwipeableViews from 'react-swipeable-views'
 import { Tabs, Tab, Link } from '@mui/material';
 import { useTheme, createTheme, ThemeProvider } from '@mui/material/styles';
 import { userInf } from '../../App';
+import { Navigate } from 'react-router-dom';
 
 
 const pages = [
@@ -67,8 +68,9 @@ function a11yProps(index: number) {
 
   interface userProp {
     user?: userInf;
+    signOut: () => void;
   }
-const Dashboard: React.FC<userProp> = ({ user }) => {
+const Dashboard: React.FC<userProp> = ({ user, signOut }) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
   const [value, setValue] = React.useState(0);
@@ -110,9 +112,9 @@ const Dashboard: React.FC<userProp> = ({ user }) => {
     });
 
     const theme = useTheme();
-    if (!user) {
-      return <h1>Loading...</h1>
-    }
+      if (!user) {
+          return <Navigate to={"/"} replace/>
+      }
     return (
       <>
         <AppBar position="static">
@@ -213,11 +215,12 @@ const Dashboard: React.FC<userProp> = ({ user }) => {
                   open={Boolean(anchorElUser)}
                   onClose={handleCloseUserMenu}
                 >
-                  {settings.map((setting) => (
-                    <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{setting}</Typography>
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center">{settings[0]}</Typography>
                     </MenuItem>
-                  ))}
+                    <MenuItem onClick={handleCloseUserMenu}>
+                      <Typography textAlign="center" onClick={signOut}>{settings[1]}</Typography>
+                    </MenuItem>
                 </Menu>
               </Box>
             </Toolbar>
@@ -229,7 +232,7 @@ const Dashboard: React.FC<userProp> = ({ user }) => {
           onChangeIndex={handleChangeIndex}
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
-            {user?.email}
+            Moses Home
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
             Moses Ufomba
