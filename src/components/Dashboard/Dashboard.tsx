@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -12,10 +12,9 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import SwipeableViews from 'react-swipeable-views'
-import { Tabs, Tab, Link } from '@mui/material';
+import { Tabs, Tab } from '@mui/material';
 import { useTheme, createTheme, ThemeProvider } from '@mui/material/styles';
 import { userInf } from '../../App';
-import { Navigate } from 'react-router-dom';
 
 
 const pages = [
@@ -112,9 +111,6 @@ const Dashboard: React.FC<userProp> = ({ user, signOut }) => {
     });
 
     const theme = useTheme();
-      if (!user) {
-          return <Navigate to={"/"} replace/>
-      }
     return (
       <>
         <AppBar position="static">

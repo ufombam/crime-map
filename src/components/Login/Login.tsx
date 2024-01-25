@@ -1,13 +1,12 @@
 import React, {useEffect} from 'react';
 import firebase from "firebase/compat/app";
-import { getAnalytics } from "firebase/analytics";
 import { userInf } from "../../App";
 
 
 
 interface LoginProps {
     updateUser: (newValue: userInf) => void;
-  }
+}
 
 
 const Login: React.FC<LoginProps> = ({ updateUser }) => {
@@ -25,10 +24,8 @@ const Login: React.FC<LoginProps> = ({ updateUser }) => {
 
     var firebaseui = require('firebaseui');
 
-    // Initialize Firebase
-    const app = firebase.initializeApp(firebaseConfig);
-    //const analytics = getAnalytics(app);
-
+        // Initialize Firebase
+        const app = firebase.initializeApp(firebaseConfig);
 
     //ui configuration file
     var uiConfig = {

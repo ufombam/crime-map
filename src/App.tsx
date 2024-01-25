@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import React, { useState, ReactNode } from 'react';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import Login from './components/Login/Login';
 import Dashboard from './components/Dashboard/Dashboard';
 import './App.css';
@@ -18,6 +18,11 @@ export   interface userInf {
   name: string;
   picture: string;
   verified_email: boolean;
+}
+interface ProtectedRouteProps {
+  user: any;
+  children?: ReactNode;
+  redirectPath?: string;
 }
 
 export const App = () => {
@@ -38,11 +43,21 @@ export const App = () => {
     //remove session storage
     localStorage.removeItem('user');
   }
+  
+  const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ user, children, redirectPath = '/' }) => {
+    if (!user) {
+      return <Navigate to={redirectPath} replace />;
+    }
+    return children ? (children as JSX.Element) : <Outlet />;
+  };
+
   return (
     <Routes>
       <Route index element={<Login updateUser={updateUser} />} />
-      <Route path='/dashboard' element={<Dashboard user={user} signOut={signOut}/>}></Route>
-      <Route path="*" element={<h1>Nothing to see here</h1>} />
+      <Route element={<ProtectedRoute user={user} />}>
+        <Route path='/dashboard' element={<Dashboard user={user} signOut={signOut}/>}></Route>
+        <Route path="*" element={<h1>Nothing to see here</h1>} />
+      </Route>
     </Routes>
   );
 };
