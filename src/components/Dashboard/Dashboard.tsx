@@ -116,7 +116,7 @@ const Dashboard: React.FC<userProp> = ({ user, signOut }) => {
 
       useEffect(() => {
         const loader = new Loader({
-          apiKey: "AIzaSyCzmddSK6BoUzi3UNzAs8umx2UZ0KGnNcc",
+          apiKey: "",
           version: "weekly",
         });
       
@@ -128,7 +128,7 @@ const Dashboard: React.FC<userProp> = ({ user, signOut }) => {
           zoom: 8,
         });
       }
-  
+
       initMap();
       }, [])
   
