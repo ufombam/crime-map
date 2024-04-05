@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -15,7 +15,8 @@ import SwipeableViews from 'react-swipeable-views'
 import { Tabs, Tab } from '@mui/material';
 import { useTheme, createTheme, ThemeProvider } from '@mui/material/styles';
 import { userInf } from '../../App';
-
+import { Loader } from "@googlemaps/js-api-loader";
+import '../Dashboard/Dashbboard.css';
 
 const pages = [
   {
@@ -69,6 +70,7 @@ function a11yProps(index: number) {
     user?: userInf;
     signOut: () => void;
   }
+
 const Dashboard: React.FC<userProp> = ({ user, signOut }) => {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
@@ -111,6 +113,25 @@ const Dashboard: React.FC<userProp> = ({ user, signOut }) => {
     });
 
     const theme = useTheme();
+
+      useEffect(() => {
+        const loader = new Loader({
+          apiKey: "AIzaSyCzmddSK6BoUzi3UNzAs8umx2UZ0KGnNcc",
+          version: "weekly",
+        });
+      
+        let map: google.maps.Map;
+        async function initMap(): Promise<void> {
+        const { Map } = await google.maps.importLibrary("maps") as google.maps.MapsLibrary;
+        map = new Map(document.getElementById("map") as HTMLElement, {
+          center: { lat: -34.397, lng: 150.644 },
+          zoom: 8,
+        });
+      }
+  
+      initMap();
+      }, [])
+  
     return (
       <>
         <AppBar position="static">
@@ -228,10 +249,10 @@ const Dashboard: React.FC<userProp> = ({ user, signOut }) => {
           onChangeIndex={handleChangeIndex}
         >
           <TabPanel value={value} index={0} dir={theme.direction}>
-            Moses Home
+            Recording page
           </TabPanel>
           <TabPanel value={value} index={1} dir={theme.direction}>
-            Moses Ufomba
+            <div id='map'></div>
           </TabPanel>
         </SwipeableViews>
 </>

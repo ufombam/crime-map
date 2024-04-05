@@ -30,16 +30,13 @@ export const App = () => {
   const [user, setUser] = useState<userInf | undefined>(storedUser ? JSON.parse(storedUser) : undefined);
 
   const updateUser = (newValue: userInf): void => {
-    console.log("Updating user in App component:", newValue);
     setUser(newValue);
-
     // Persist user information in localStorage
     localStorage.setItem('user', JSON.stringify(newValue));
   }
 
   const signOut = () => {
     setUser(undefined);
-
     //remove session storage
     localStorage.removeItem('user');
   }
